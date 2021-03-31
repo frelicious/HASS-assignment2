@@ -141,7 +141,7 @@ it could also be because that victims have spoken out, and reported the crimes.<
       height = 210 - margin.top - margin.bottom;
   
   //Read the data
-  d3.csv("test.csv", function(data) {
+  d3.csv("lessthan1000.csv", function(data) {
     // group the data: I want to draw one line per group
     var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
       .key(function(d) { return d.Type_of_Crime;})
