@@ -1,0 +1,330 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<style>
+#part1 {
+
+max-width: 1500px;
+margin-left: auto;
+margin-right: auto;
+
+}
+
+#part2 {
+
+max-width: 1000px;
+margin-left: auto;
+margin-right: auto;
+}
+
+h1 { 
+color: #fff; 
+font-family: 'Helvetica Neue', sans-serif; 
+font-size: 50px; 
+font-weight: bold; 
+letter-spacing: -1px; 
+line-height: 1; 
+text-align: center; }
+
+h2, h3 { 
+color: #fff; 
+font-family: 'Helvetica Neue', sans-serif; 
+font-size: 30px;  
+letter-spacing: -1px; 
+line-height: 1; 
+text-align: center; }
+
+div {
+
+color: #111; 
+font-family: 'Helvetica Neue', sans-serif; 
+font-size: 20px;  
+letter-spacing: -1px; 
+line-height: 1; 
+text-align: center; 
+font-weight: 900; 
+backdrop-filter: blur(10px);
+
+
+}
+
+p {
+    color: #fff;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    text-align: center; 
+    letter-spacing: -1px; 
+    backdrop-filter: blur(10px);
+    max-width:1000px;
+    margin-left: auto;
+    margin-right: auto;
+    border-style:double;
+}
+
+html { 
+  background: url(https://images.unsplash.com/photo-1500099817043-86d46000d58f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1868&q=80) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+}
+
+a:link{
+
+color: rgb(6,69,173);
+
+text-decoration: none;
+
+}
+
+a:visited {
+
+color: rgb(11,0,128)
+
+}
+
+a:hover {
+
+text-decoration: underline
+
+}
+
+a:active {
+
+color: rgb(250,167,0)
+
+}
+
+</style>
+<!-- Create a div where the graph will take place -->
+<main class="bg-image">
+<h1>Total number of Victims by Types of Crime from 2011 to 2019</h1>
+<h3>Data obtained from <a href="https://data.gov.sg/dataset/victims-of-selected-major-selected-offences">Data.gov.sg</a></h3>
+<p><b>#1 - Data Cleaning</b><br>
+    The data was filtered via Python to drop redundant rows and rows with strange description. Only the 'Total Victims' in each category was kept in the data set. A pivot table csv file and total victims csv file was obtained, but I later decided to use only the total victims CSV file. Rows with '0' were not dropped because there might be years where there are no victims of the particular crime. 
+    A 'Total Victim' table was also drafted out in the table, reflecting the total victims of all crimes. 
+    After visualizing the data, I realized that there was a need to split it into two different tables because the y axis wouldn't 
+    adequately reflect the number of victims for the victims of the type of crimes that were below 1000. 
+    Therefore, the visualization is split into two parts.</p>
+<h2>Less than 1000 Victims</h2>
+<div id="part1"></div>
+<p><b>#2 - Trends and Patterns for the type of crimes that has lesser than 1000 Victims</b><br>Murder victims remain low <br>
+    Rape cases have seen an upward trend <br>
+    Rioting victims have generally been declining <br>
+    Robbery victims have decreased significantly <br>
+Serious hurt victims have generally remained the same <br>
+Snatch theft victims decreased significantly <br>
+
+</p>
+<h2>More than 1000 Victims</h2>
+<div id="part2"></div>
+<p><b>#3 - Trends and Patterns for the type of crimes that has more than 1000 Victims</b><br> 
+    Cheating & related victims have seen an upward trend over the years   <br>
+    Outrage of modesty victims have seen a slight increase over the years <br>
+</p>
+<p><b>#4 - Overall Commentary</b><br>
+In general, the total number of victims have been on the rise. 
+There is a need for the authorities to focus on rape, serious hurt, cheating and other related crimes, and outrage of modesty. 
+Although there is a substantial increase in victims over the years, 
+it could also be because that victims have spoken out, and reported the crimes.</p>
+</main>
+<script>
+
+  // set the dimensions and margins of the graph
+  var margin = {top: 30, right: 0, bottom: 30, left: 65},
+      width = 900 - margin.left - margin.right
+   ,
+      height = 210 - margin.top - margin.bottom;
+  
+  //Read the data
+  d3.csv("test.csv", function(data) {
+    // group the data: I want to draw one line per group
+    var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+      .key(function(d) { return d.Type_of_Crime;})
+      .entries(data);
+  
+    // What is the list of groups?
+    allKeys = sumstat.map(function(d){return d.key})
+  
+    // Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
+    var svg = d3.select("#part1")
+      .selectAll("uniqueChart")
+      .data(sumstat)
+      .enter()
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+  
+    // Add X axis --> it is a date format
+    var x = d3.scaleLinear()
+      .domain(d3.extent(data, function(d) {return d.year; }))
+      .range([ 0, width ]);
+    svg
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(3));
+      svg.append("text")             
+      .style("text-anchor", "middle")
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top) + ")")
+      .text("Year");
+    //Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.n;
+         })])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y).ticks(5)); 
+     
+    svg.append("text")
+    .attr("transform", "translate(-32, " + (height / 1.25) + ") rotate(-90)")
+    .text("Victims")
+    .attr("text-align", "middle");
+    // color palette
+    var color = d3.scaleOrdinal()
+      .domain(allKeys)
+      .range(['#FFC6C0','#E9967A','#FA8072','#F08080','#CD5C5C','#CA5246'])
+    
+
+    svg.on("mouseover", function(d){
+      
+      svg.append("text")
+      .attr("transform", "translate(0," + height/2 + ")")
+      .style("text-anchor", "middle")
+      .text(d.values)
+    })
+      
+      // Draw the line
+      svg
+        .append("path")
+          .attr("fill", function(d){return color(d.key) })
+          .attr("stroke", "none")
+          .attr("d", function(d){
+            return d3.area(d, false)
+          })
+          .transition()
+            .duration(2000)
+          .attr("d", function(d){
+            return d3.area(d, true)
+            .x(function(d) { return x(d.year) })
+            .y0(y(0))
+            .y1(function(d) {return y(+d.n) })
+              (d.values)
+          });
+    // Add titles
+    svg
+      .append("text")
+      .attr("text-anchor", "start")
+      .attr("y", -5)
+      .attr("x", 0)
+      .text(function(d){ return(d.key)})
+      .style("fill", function(d){ return color(d.key) })
+  
+  })
+  </script>
+
+<script>
+
+
+  
+  //Read the data
+  d3.csv("morethan1000.csv", function(data) {
+    // group the data: I want to draw one line per group
+    var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+      .key(function(d) { return d.Type_of_Crime;})
+      .entries(data);
+  
+    // What is the list of groups?
+    allKeys = sumstat.map(function(d){return d.key})
+  
+    // Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
+    var svg = d3.select("#part2")
+      .selectAll("uniqueChart")
+      .data(sumstat)
+      .enter()
+      .append("svg")
+        .attr("width", width + margin.left+ margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+  
+    // Add X axis --> it is a date format
+    var x = d3.scaleLinear()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width ]);
+    svg
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(3));
+      svg.append("text")             
+      .style("text-anchor", "middle")
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top) + ")")
+      .text("Year");
+    //Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.n;
+         })])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y).ticks(5));
+      svg.append("text")
+    .attr("transform", "translate(-43, " + (height / 1.25) + ") rotate(-90)")
+    .text("Victims")
+    .attr("text-align", "middle");
+    // color palette
+    var color = d3.scaleOrdinal()
+      .domain(allKeys)
+      .range(['#E32901','#B12D11','#800000'])
+         
+      // Draw the line
+      svg
+        .append("path")
+          .attr("fill", function(d){ return color(d.key) })
+          .attr("stroke", "none")
+          .attr("d", function(d){
+            return d3.area(d, false)
+          })
+          .transition()
+          .duration(2000)
+          .attr("d", function(d){
+            return d3.area()
+            .x(function(d) { return x(d.year) })
+            .y0(y(0))
+            .y1(function(d) { return y(+d.n) })
+              (d.values);
+            // .on("mouseover", function (d) { console.log(d);
+            //   //insert some code to return the total no. of victim in that column
+            //     d3.select(this).append("text")
+            //     .attr("transform",
+            // translate(" + (width/2) + " ," + 
+            //                (height/2) + ")")
+            // .text(function(d) {return +d.n});
+            // })
+       
+          })  
+   
+   
+    // Add titles
+    svg
+      .append("text")
+      .attr("text-anchor", "start")
+      .attr("y", -5)
+      .attr("x", 0)
+      .text(function(d){ return(d.key)})
+      .style("fill", function(d){ return color(d.key) })
+  
+  })
+  </script>
+
+  </html>
