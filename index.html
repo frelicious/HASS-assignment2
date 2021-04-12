@@ -12,9 +12,6 @@ margin-left: auto;
 margin-right: auto;
 
 }
-    g {
-        color:white;
-        background-color:white; }
 
 #part2 {
 
@@ -42,14 +39,15 @@ text-align: center; }
 
 div {
 
-color: #111; 
+color: #fff; 
 font-family: 'Helvetica Neue', sans-serif; 
 font-size: 20px;  
 letter-spacing: -1px; 
 line-height: 1; 
 text-align: center; 
 font-weight: 900; 
-backdrop-filter: blur(10px);
+backdrop-filter: blur(20px);
+   
 
 
 }
@@ -108,11 +106,11 @@ color: rgb(250,167,0)
 <h3>Data obtained from <a href="https://data.gov.sg/dataset/victims-of-selected-major-selected-offences">Data.gov.sg</a></h3>
 <p><b>#1 - Data Cleaning</b><br>
     a. The data was filtered via Python to drop redundant rows and rows with strange description. Only the 'Total Victims' in each category was kept in the data set. <br>
-    b. A pivot table csv file and total victims csv file was obtained, but I later decided to use only the total victims CSV file. <br>
-    c. Rows with '0' were not dropped because there might be years where there are no victims of the particular crime. <br>
-    d. A 'Total Victim' table was also drafted out in the table, reflecting the total victims of all crimes. <br>
+    b. A pivot table csv file and total victims csv file was obtained, but I later decided to use only the total victims CSV file. <br><br>
+    c. Rows with '0' were not dropped because there might be years where there are no victims of the particular crime. <br><br>
+    d. A 'Total Victim' table was also drafted out in the table, reflecting the total victims of all crimes. <br><br>
     c. After visualizing the data, I realized that there was a need to split it into two different tables because the y axis wouldn't 
-    adequately reflect the number of victims for the victims of the type of crimes that were below 1000. <br>
+    adequately reflect the number of victims for the victims of the type of crimes that were below 1000. <br><br>
     d. Therefore, the visualization is split into two parts.</p>
 <h2>Less than 1000 Victims</h2>
 <div id="part1"></div>
@@ -126,9 +124,9 @@ e. Snatch theft victims decreased significantly <br>
 </p>
 <h2>More than 1000 Victims</h2>
 <div id="part2"></div>
-<p><b>#3 - Trends and Patterns for the type of crimes that has more than 1000 Victims</b><br> 
-    Cheating & related victims have seen an upward trend over the years   <br>
-    Outrage of modesty victims have seen a slight increase over the years <br>
+<p><b>#3 - Trends and Patterns for the type of crimes that has more than 1000 Victims</b><br> <br>
+    a. Cheating & related victims have seen an upward trend over the years   <br><br>
+    b. Outrage of modesty victims have seen a slight increase over the years <br><br>
 </p>
 <p><b>#4 - Overall Commentary</b><br>
 In general, the total number of victims have been on the rise. 
