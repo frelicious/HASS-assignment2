@@ -55,7 +55,6 @@ p {
     color: #fff;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 15px;
-    text-align: center; 
     letter-spacing: -1px; 
     backdrop-filter: blur(10px);
     max-width:1000px;
@@ -105,19 +104,21 @@ color: rgb(250,167,0)
 <h1>Total number of Victims by Types of Crime from 2011 to 2019</h1>
 <h3>Data obtained from <a href="https://data.gov.sg/dataset/victims-of-selected-major-selected-offences">Data.gov.sg</a></h3>
 <p><b>#1 - Data Cleaning</b><br>
-    The data was filtered via Python to drop redundant rows and rows with strange description. Only the 'Total Victims' in each category was kept in the data set. A pivot table csv file and total victims csv file was obtained, but I later decided to use only the total victims CSV file. Rows with '0' were not dropped because there might be years where there are no victims of the particular crime. 
-    A 'Total Victim' table was also drafted out in the table, reflecting the total victims of all crimes. 
-    After visualizing the data, I realized that there was a need to split it into two different tables because the y axis wouldn't 
-    adequately reflect the number of victims for the victims of the type of crimes that were below 1000. 
-    Therefore, the visualization is split into two parts.</p>
+    a. The data was filtered via Python to drop redundant rows and rows with strange description. Only the 'Total Victims' in each category was kept in the data set. <br>
+    b. A pivot table csv file and total victims csv file was obtained, but I later decided to use only the total victims CSV file. <br>
+    c. Rows with '0' were not dropped because there might be years where there are no victims of the particular crime. <br>
+    d. A 'Total Victim' table was also drafted out in the table, reflecting the total victims of all crimes. <br>
+    c. After visualizing the data, I realized that there was a need to split it into two different tables because the y axis wouldn't 
+    adequately reflect the number of victims for the victims of the type of crimes that were below 1000. <br>
+    d. Therefore, the visualization is split into two parts.</p>
 <h2>Less than 1000 Victims</h2>
 <div id="part1"></div>
 <p><b>#2 - Trends and Patterns for the type of crimes that has lesser than 1000 Victims</b><br>Murder victims remain low <br>
-    Rape cases have seen an upward trend <br>
-    Rioting victims have generally been declining <br>
-    Robbery victims have decreased significantly <br>
-Serious hurt victims have generally remained the same <br>
-Snatch theft victims decreased significantly <br>
+    a. Rape cases have seen an upward trend <br>
+   b. Rioting victims have generally been declining <br>
+   c. Robbery victims have decreased significantly <br>
+d. Serious hurt victims have generally remained the same <br>
+e. Snatch theft victims decreased significantly <br>
 
 </p>
 <h2>More than 1000 Victims</h2>
@@ -267,6 +268,7 @@ it could also be because that victims have spoken out, and reported the crimes.<
       .call(d3.axisBottom(x).ticks(3));
       svg.append("text")             
       .style("text-anchor", "middle")
+      .style("color", "white")
       .attr("transform",
             "translate(" + (width/2) + " ," + 
                            (height + margin.top) + ")")
@@ -277,7 +279,8 @@ it could also be because that victims have spoken out, and reported the crimes.<
          })])
       .range([ height, 0 ]);
     svg.append("g")
-      .call(d3.axisLeft(y).ticks(5));
+      .call(d3.axisLeft(y).ticks(5))
+      .style("color", "white");
       svg.append("text")
     .attr("transform", "translate(-43, " + (height / 1.25) + ") rotate(-90)")
     .text("Victims")
